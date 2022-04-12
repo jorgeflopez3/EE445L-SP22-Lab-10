@@ -1,0 +1,33 @@
+Dependencies for Project 'Python', Target 'UARTInts': (DO NOT MODIFY !)
+CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
+F (.\startup.s)(0x519BA7B8)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_UARTInts-IC:\Users\jonat\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\jonat\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "TM4C123GH6PM SETA 1" --pd "_RTE_ SETA 1"--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\UARTIntsTestMain.c)(0x62559D83)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_UARTInts-IC:\Users\jonat\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\jonat\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="534" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\uartintstestmain.o --omf_browse .\uartintstestmain.crf --depend .\uartintstestmain.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8EF392)
+I (../inc/PLL.h)(0x5E10D0A5)
+I (../inc/CortexM.h)(0x5E10D019)
+I (../inc/UART0int.h)(0x5E177752)
+I (../inc/LaunchPad.h)(0x5E10D0A5)
+I (../inc/SysTickInts.h)(0x5E0F7406)
+I (../inc/tm4c123gh6pm.h)(0x5388C2D9)
+F (..\inc\PLL.c)(0x5E1B402E)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_UARTInts-IC:\Users\jonat\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\jonat\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="534" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8EF392)
+I (..\inc\../inc/PLL.h)(0x5E10D0A5)
+I (..\inc\../inc/tm4c123gh6pm.h)(0x5388C2D9)
+F (..\inc\UART0int.c)(0x5E177752)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_UARTInts-IC:\Users\jonat\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\jonat\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="534" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\uart0int.o --omf_browse .\uart0int.crf --depend .\uart0int.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8EF392)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8EF392)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5E8EF392)
+I (..\inc\../inc/tm4c123gh6pm.h)(0x5388C2D9)
+I (..\inc\../inc/CortexM.h)(0x5E10D019)
+I (..\inc\../inc/FIFO.h)(0x555501EC)
+I (..\inc\../inc/UART0int.h)(0x5E177752)
+F (..\inc\LaunchPad.c)(0x6254CF97)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_UARTInts-IC:\Users\jonat\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\jonat\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="534" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\launchpad.o --omf_browse .\launchpad.crf --depend .\launchpad.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8EF392)
+I (..\inc\../inc/LaunchPad.h)(0x5E10D0A5)
+I (..\inc\../inc/tm4c123gh6pm.h)(0x5388C2D9)
+I (..\inc\../inc/CortexM.h)(0x5E10D019)
+F (..\inc\SysTickInts.c)(0x5E0F7406)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I .. -I ..\..\.. --C99-I.\RTE\_UARTInts-IC:\Users\jonat\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\jonat\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-D__UVISION_VERSION="534" -D_RTE_ -DTM4C123GH6PM -D_RTE_ -Drvmdk -DPART_LM4F120H5QR-o .\systickints.o --omf_browse .\systickints.crf --depend .\systickints.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8EF392)
+I (..\inc\../inc/tm4c123gh6pm.h)(0x5388C2D9)
+I (..\inc\../inc/CortexM.h)(0x5E10D019)
+I (..\inc\../inc/SysTickInts.h)(0x5E0F7406)
