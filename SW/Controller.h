@@ -10,6 +10,8 @@ void Timer2A_Init( uint32_t period, uint32_t priority);
 
 void Timer2A_Handler(void); 
 
+void Controller_Init();
+
 //------------Calculate_Error------------
 // Calculate the error between the desired
 // speed and the actual speed 

@@ -32,6 +32,7 @@
 #include "../inc/SysTickInts.h"
 #include "../inc/tm4c123gh6pm.h"
 #include "Controller.h" 
+#include "Tachometer.h"
 
 int Count;     // number of data points in measurement
 int Flag=0;    // semaphore, set when measuremenst done
@@ -41,6 +42,8 @@ uint32_t kp1;
 uint32_t kp2;
 uint32_t ki1;
 uint32_t ki2;
+uint32_t rps_in;
+uint32_t period_in;
 
 #define SIZE 10
 uint32_t buffer[SIZE];
@@ -50,11 +53,14 @@ char cmd;
   PLL_Init(Bus80MHz);       // set system clock to 80 MHz
   UART_Init();              // initialize UART
   LaunchPad_Init();
-	Timer2A_Init(800000,2);
+	Controller_Init();
+	Tachometer_Init();
   Count = 0;
   Flag = 0;
   EnableInterrupts();       // Enable interrupts
   while(1){int i;
+		rps_in = Tachometer_RPS();
+		period_in = Tachometer_Period();
     cmd = UART_InCharNonBlock();
     if(cmd == 'M'){
       speed = UART_InUDecNoEcho(); // CR terminated
@@ -69,17 +75,6 @@ char cmd;
 		}
   }
 }
-void SysTick_Handler(void){
-  if(Count > SIZE-1){
-    NVIC_ST_CTRL_R = 0; // stop interrupts
-    Flag = 1; // signal semaphore
-  }else{
-    data = LaunchPad_Input();
-    buffer[Count] = data;
-    Count++;
-  }
-}
-
 		
 //------------UART_InUDecNoEcho------------	
 // InUDec accepts ASCII input in unsigned decimal format	

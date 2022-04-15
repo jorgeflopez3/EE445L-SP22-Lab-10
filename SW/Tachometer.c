@@ -4,10 +4,11 @@
 #include "../inc/CortexM.h"
 uint32_t Period;                       // 24-bit, 12.5 ns units
 uint32_t static First;                 // Timer0A first edge, 12.5 ns units
-int32_t Done;                          // mailbox status set each rising
+int32_t Done;   // mailbox status set each rising
+uint32_t MotorRps = 0;
 
 void Tachometer_Init(void){
-	SYSCTL_RCGCTIMER_R |= 0x01;          // activate timer0
+	SYSCTL_RCGCTIMER_R |= 0x02;          // activate timer1
   SYSCTL_RCGCGPIO_R |= 0x02;           // activate port B
   First = 0;                           // first will be wrong
   Done = 0;                            // set on subsequent
@@ -17,26 +18,29 @@ void Tachometer_Init(void){
   GPIO_PORTB_PCTL_R   = (GPIO_PORTB_PCTL_R
                        & 0xFFF0FFFF)
                        + 0x00070000;
-  TIMER0_CTL_R       &= ~0x00000001;   // disable timer0A during setup
-  TIMER0_CFG_R        =  0x00000004;   // configure for 16-bit capture mode
-  TIMER0_TAMR_R       =  0x00000007;   // configure for rising edge event
-  TIMER0_CTL_R       &= ~0x0000000C;   // rising edge
-  TIMER0_TAILR_R      =  0x0000FFFF;   // start value
-  TIMER0_TAPR_R       =  0xFF;         // activate prescale, creating 24-bit 
-  TIMER0_IMR_R       |=  0x00000004;   // enable capture match interrupt
-  TIMER0_ICR_R        =  0x00000004;   // clear timer0A capture match flag
-  TIMER0_CTL_R       |=  0x00000001;   // timer0A 24-b, +edge, interrupts
-  NVIC_PRI4_R         = (NVIC_PRI4_R
-                       & 0x00FFFFFF)
-                       | 0x40000000;   //Timer0A=priority 2
-  NVIC_EN0_R = 1<<19;                  // enable interrupt 19 in NVIC
+  TIMER1_CTL_R       &= ~0x00000001;   // disable timer1A during setup
+  TIMER1_CFG_R        =  0x00000004;   // configure for 16-bit capture mode
+  TIMER1_TAMR_R       =  0x00000007;   // configure for rising edge event
+  TIMER1_CTL_R       &= ~0x0000000C;   // rising edge
+  TIMER1_TAILR_R      =  0x0000FFFF;   // start value
+  TIMER1_TAPR_R       =  0xFF;         // activate prescale, creating 24-bit 
+  TIMER1_IMR_R       |=  0x00000004;   // enable capture match interrupt
+  TIMER1_ICR_R        =  0x00000004;   // clear timer1A capture match flag
+  TIMER1_CTL_R       |=  0x00000001;   // timer0A 24-b, +edge, interrupts
+  NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF00FF)|(2<<13); // priority 
+// interrupts enabled in the main program after all devices initialized
+// vector number 37, interrupt number 21
+  NVIC_EN0_R = 1<<21;           // 9) enable IRQ 21 in NVIC
   EnableInterrupts();                  
 }
 
-void Timer0A_Handler(void){
-  TIMER0_ICR_R = 0x00000004; // acknowledge timer0A
-  Period = (First - TIMER0_TAR_R)&0x00FFFFFF; 
-  First = TIMER0_TAR_R;      // setup for next
+void Timer1A_Handler(void){
+  TIMER1_ICR_R = 0x00000004; // acknowledge timer1A
+  Period = (First - TIMER1_TAR_R)&0x00FFFFFF; 
+	if (Period > 83333) {
+		MotorRps = 6666666 / Period;
+	}
+  First = TIMER1_TAR_R;      // setup for next
   Done = 1;                  // set semaphore
 }
 
@@ -45,5 +49,5 @@ uint32_t Tachometer_Period(void){
 }
 
 uint32_t Tachometer_RPS() {
-	return 6666666 / Period;
+	return MotorRps;
 }

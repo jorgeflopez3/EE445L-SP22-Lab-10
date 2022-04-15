@@ -16,4 +16,11 @@ void Tachometer_Init(void);
 // Output: current period
 uint32_t Tachometer_Period(void);
 
+//------------Tachometer_RPS------------
+// Output the current rps measured by the tachometer
+// 
+// Input: none
+// Output: current rps
+uint32_t Tachometer_RPS(void);
+
 #endif

@@ -4,7 +4,7 @@
 #include "../inc/tm4c123gh6pm.h"
 
 uint32_t desired = 300; 
-uint32_t Period;     		// 24-bit, 12.5 ns units
+//uint32_t period;     		// 24-bit, 12.5 ns units
 //uint32_t Period;     		// 24-bit, 12.5 ns units
 uint32_t rps;      		// motor speed in 1 rps
 int32_t E;           		// speed error in 1 rps
@@ -18,6 +18,16 @@ int32_t Ki1;
 int32_t Ki2; 
 int32_t D; 
 int32_t MotorSpeed;    
+
+void Controller_Init() {	
+	PWM0A_Init(40000,7000);      // duty cycle 
+	desired = 300; 
+	Kp1 = 75; 
+	Kp2 = 337; 
+	Ki1 = 75;
+	Ki2 = 337; 
+	//Timer2A_Init(800000,2);
+}
 
 // ***************** Timer2A_Init ****************
 // Activate Timer2 interrupts to run user task periodically
@@ -39,13 +49,7 @@ void Timer2A_Init( uint32_t period, uint32_t priority){
 // vector number 39, interrupt number 23
   NVIC_EN0_R = 1<<23;           // 9) enable IRQ 23 in NVIC
   TIMER2_CTL_R = 0x00000001;    // 10) enable timer2A
-	
-	PWM0A_Init(40000,30000);      // 75% duty cycle 
-	desired = 300; 
-	Kp1 = 75; 
-	Kp2 = 337; 
-	Ki1 = 75;
-	Ki2 = 337; 
+
 }
 
 void Timer2A_Handler(void){
