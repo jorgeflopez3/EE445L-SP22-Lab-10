@@ -43,3 +43,7 @@ void Timer0A_Handler(void){
 uint32_t Tachometer_Period(void){
 	return Period;
 }
+
+uint32_t Tachometer_RPS() {
+	return 6666666 / Period;
+}

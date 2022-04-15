@@ -5,6 +5,7 @@
 
 uint32_t desired = 300; 
 uint32_t Period;     		// 24-bit, 12.5 ns units
+//uint32_t Period;     		// 24-bit, 12.5 ns units
 uint32_t rps;      		// motor speed in 1 rps
 int32_t E;           		// speed error in 1 rps
 int32_t U;           		// duty cycle 40 to 39960
@@ -24,7 +25,7 @@ int32_t MotorSpeed;
 //          period in units (1/clockfreq)
 //          priority 0 (highest) to 7 (lowest)
 // Outputs: none
-void Timer2A_Init(void(*task)(void), uint32_t period, uint32_t priority){
+void Timer2A_Init( uint32_t period, uint32_t priority){
   SYSCTL_RCGCTIMER_R |= 0x04;   // 0) activate timer2
   TIMER2_CTL_R = 0x00000000;    // 1) disable timer2A during setup
   TIMER2_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
@@ -38,6 +39,13 @@ void Timer2A_Init(void(*task)(void), uint32_t period, uint32_t priority){
 // vector number 39, interrupt number 23
   NVIC_EN0_R = 1<<23;           // 9) enable IRQ 23 in NVIC
   TIMER2_CTL_R = 0x00000001;    // 10) enable timer2A
+	
+	PWM0A_Init(40000,30000);      // 75% duty cycle 
+	desired = 300; 
+	Kp1 = 75; 
+	Kp2 = 337; 
+	Ki1 = 75;
+	Ki2 = 337; 
 }
 
 void Timer2A_Handler(void){
@@ -59,7 +67,7 @@ void Timer2A_Handler(void){
     if(I <  300) I = 300;         // Minimum PWM output = 300
     if(I >39900) I = 39900;       // Maximum PWM output = 39900
 
-    U   = P + I + D;              // Calculate the actuator value
+    U   = P + I;              // Calculate the actuator value
     if(U < 300)  U=300;           // Minimum PWM output
     if(U >39900) U=39900;         // 3000 to 39900
 
