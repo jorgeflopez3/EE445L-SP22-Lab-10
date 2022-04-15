@@ -1,10 +1,12 @@
+#include <stdint.h>
 
-//------------Controller_Init------------
-// Initialize the periodic interrupt (Timer1A)
-// 
-// Input: none
-// Output: none
-void Controller_Init(void);
+// ***************** Timer2A_Init ****************
+// Activate Timer2 interrupts to run user task periodically
+// Inputs:  task is a pointer to a user function
+//          period in units (1/clockfreq)
+//          priority 0 (highest) to 7 (lowest)
+// Outputs: none
+void Timer2A_Init(void(*task)(void), uint32_t period, uint32_t priority); 
 
 //------------Calculate_Error------------
 // Calculate the error between the desired

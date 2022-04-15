@@ -49,7 +49,7 @@ char cmd;
   PLL_Init(Bus80MHz);       // set system clock to 80 MHz
   UART_Init();              // initialize UART
   LaunchPad_Init();
-	PWM0A_Init(40000,20000);
+	PWM0A_Init(40000,5000);
   Count = 0;
   Flag = 0;
   EnableInterrupts();       // Enable interrupts
