@@ -3,7 +3,7 @@
 #include "PWM.h" 
 #include "../inc/tm4c123gh6pm.h"
 
-uint32_t Xstar = 300; 
+uint32_t desired = 300; 
 uint32_t Period;     		// 24-bit, 12.5 ns units
 uint32_t rps;      		// motor speed in 1 rps
 int32_t E;           		// speed error in 1 rps
@@ -49,7 +49,7 @@ void Timer2A_Handler(void){
     Count10ms = 0;
   }
 
-    E = Xstar-rps;                // Determine ERROR
+    E = desired-rps;                // Determine ERROR
     MotorSpeed = rps;             // Set the Motor Speed
     P  =  (Kp1 * E)/Kp2;          // Proportional terms from Blynk    
     if(P <  300) P = 300;         // Minimum PWM output
