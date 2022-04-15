@@ -1,3 +1,7 @@
+#ifndef __TACHOMETER__
+#define __TACHOMETER__
+#include <stdint.h>
+
 //------------Tachometer_Init------------
 // Initialize input capture for tachometer using Timer0A
 // 
@@ -10,4 +14,6 @@ void Tachometer_Init(void);
 // 
 // Input: none
 // Output: current period
-int Tachometer_Period(void);
+uint32_t Tachometer_Period(void);
+
+#endif
