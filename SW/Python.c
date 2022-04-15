@@ -31,6 +31,7 @@
 #include "../inc/LaunchPad.h"
 #include "../inc/SysTickInts.h"
 #include "../inc/tm4c123gh6pm.h"
+#include "PWM.h" 
 
 // receive commands
 // L turns on LED with a numerical value
@@ -48,6 +49,7 @@ char cmd;
   PLL_Init(Bus80MHz);       // set system clock to 80 MHz
   UART_Init();              // initialize UART
   LaunchPad_Init();
+	PWM0A_Init(40000,20000);
   Count = 0;
   Flag = 0;
   EnableInterrupts();       // Enable interrupts
