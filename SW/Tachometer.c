@@ -40,7 +40,7 @@ void Timer1A_Handler(void){
   TIMER1_ICR_R = 0x00000004; // acknowledge timer1A
   Period = (First - TIMER1_TAR_R)&0x00FFFFFF; 
 	if (Period > 83333) {
-		MotorRps = 6666666 / Period;
+		MotorRps = 66666660 / Period;
 	}
   First = TIMER1_TAR_R;      // setup for next
   Done = 1;                  // set semaphore

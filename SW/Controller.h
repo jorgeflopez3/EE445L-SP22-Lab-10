@@ -12,19 +12,15 @@ void Timer2A_Handler(void);
 
 void Controller_Init();
 
-//------------Calculate_Error------------
-// Calculate the error between the desired
-// speed and the actual speed 
-// Input: int actualSpeed, int desiredSpeed
-// Output: int
-int Calculate_Error(int actualSpeed, int desiredSpeed);
+void Controller_SetSpeed(int32_t speed);
 
-//------------Estimate_MotorSpeed------------
-// Make an estimate of motor speed in RPM vs.
-// PWM duty cycle 
-// Input: int dutyCycle
-// Output: int
-int Estimate_MotorSpeed(int dutyCycle); 
+void Controller_SetPConsts(int32_t kp1, int32_t kp2);
+
+void Controller_SetIConsts(int32_t ki1, int32_t ki2);
+
+void Controller_SetCurrentRps(uint32_t currentRps);
+
+uint32_t Controller_GetRps();
 
 // Global Count Var
 extern uint8_t Count10ms; 

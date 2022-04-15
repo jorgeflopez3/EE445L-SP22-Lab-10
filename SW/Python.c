@@ -37,13 +37,13 @@
 int Count;     // number of data points in measurement
 int Flag=0;    // semaphore, set when measuremenst done
 uint32_t data; // measured data from switches
-uint32_t speed;  // value from Python script
-uint32_t kp1;
-uint32_t kp2;
-uint32_t ki1;
-uint32_t ki2;
-uint32_t rps_in;
-uint32_t period_in;
+//int32_t speed;  // value from Python script
+//int32_t kp1;
+//int32_t kp2;
+//int32_t ki1;
+//int32_t ki2;
+int32_t rps_in;
+int32_t period_in;
 
 #define SIZE 10
 uint32_t buffer[SIZE];
@@ -61,17 +61,25 @@ char cmd;
   while(1){int i;
 		rps_in = Tachometer_RPS();
 		period_in = Tachometer_Period();
+		int32_t speed;  // value from Python script
+		int32_t kp1;
+		int32_t kp2;
+		int32_t ki1;
+		int32_t ki2;
     cmd = UART_InCharNonBlock();
     if(cmd == 'M'){
       speed = UART_InUDecNoEcho(); // CR terminated
+			Controller_SetSpeed(speed*10);
     }
 		if (cmd == 'P') {
 			kp1 = UART_InUDecNoEcho();
 			kp2 = UART_InUDecNoEcho();
+			Controller_SetPConsts(kp1,kp2);
 		}
 		if (cmd == 'I') {
 			ki1 = UART_InUDecNoEcho();
 			ki2 = UART_InUDecNoEcho();
+			Controller_SetIConsts(ki1,ki2);
 		}
   }
 }

@@ -1,9 +1,10 @@
 #include <stdint.h>
 #include "Controller.h" 
+#include "Tachometer.h"
 #include "PWM.h" 
 #include "../inc/tm4c123gh6pm.h"
 
-uint32_t desired = 300; 
+uint32_t desired; 
 //uint32_t period;     		// 24-bit, 12.5 ns units
 //uint32_t Period;     		// 24-bit, 12.5 ns units
 uint32_t rps;      		// motor speed in 1 rps
@@ -21,12 +22,12 @@ int32_t MotorSpeed;
 
 void Controller_Init() {	
 	PWM0A_Init(40000,10000);      // duty cycle 
-	desired = 300; 
+	desired = 500; 
 	Kp1 = 75; 
 	Kp2 = 337; 
 	Ki1 = 75;
 	Ki2 = 337; 
-	//Timer2A_Init(800000,2);
+	Timer2A_Init(800000,2);
 }
 
 // ***************** Timer2A_Init ****************
@@ -53,14 +54,15 @@ void Timer2A_Init( uint32_t period, uint32_t priority){
 }
 
 void Timer2A_Handler(void){
-	TIMER2_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER2A timeout
+		TIMER2_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER2A timeout
 	
 		Count10ms++;
 		if(Count10ms>3){                // stopped motor
 			rps = 0;                      // set rps to zero
 			Count10ms = 0;
 		}
-
+		
+		rps = Tachometer_RPS();
     E = desired-rps;                // Determine ERROR
     MotorSpeed = rps;             // Set the Motor Speed
     P  =  (Kp1 * E)/Kp2;          // Proportional terms from Blynk    
@@ -78,3 +80,24 @@ void Timer2A_Handler(void){
     PWM0A_Duty(U);                // Send to PWM
 }  
 
+void Controller_SetSpeed(int32_t speed) {
+	desired = speed;
+}
+
+void Controller_SetPConsts(int32_t kp1, int32_t kp2) {
+	Kp1 = kp1;
+	Kp2 = kp2;
+}
+
+void Controller_SetIConsts(int32_t ki1, int32_t ki2) {
+	Ki1 = ki1;
+	Ki2 = ki2;
+}
+
+void Controller_SetCurrentRps(uint32_t currentRps) {
+	rps = currentRps;
+}
+
+uint32_t Controller_GetRps() {
+	return MotorSpeed;
+}
