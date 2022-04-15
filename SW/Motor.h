@@ -7,6 +7,6 @@ void Motor_Init(void);
 
 //------------Motor_ChangeSpeed------------
 // 
-// Input: int change
+// Input: int change 
 // Output: none
 void Motor_ChangeSpeed(int change);

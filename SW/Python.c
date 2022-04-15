@@ -32,17 +32,18 @@
 #include "../inc/SysTickInts.h"
 #include "../inc/tm4c123gh6pm.h"
 
-// receive commands
-// L turns on LED with a numerical value
-// l turns off LED
-// R starts data log
-//    Sends ten measurements of switch data at 10 Hz
 int Count;     // number of data points in measurement
 int Flag=0;    // semaphore, set when measuremenst done
 uint32_t data; // measured data from switches
-uint32_t led;  // value from Python script
+uint32_t speed;  // value from Python script
+uint32_t kp1;
+uint32_t kp2;
+uint32_t ki1;
+uint32_t ki2;
+
 #define SIZE 10
 uint32_t buffer[SIZE];
+uint32_t UART_InUDecNoEcho(void);
 int main(void){
 char cmd;
   PLL_Init(Bus80MHz);       // set system clock to 80 MHz
@@ -53,26 +54,17 @@ char cmd;
   EnableInterrupts();       // Enable interrupts
   while(1){int i;
     cmd = UART_InCharNonBlock();
-    if(cmd == 'L'){
-      led = UART_InUDec(); // CR terminated
-      LaunchPad_Output(led);
+    if(cmd == 'M'){
+      speed = UART_InUDecNoEcho(); // CR terminated
     }
-    if(cmd == 'l'){
-      LaunchPad_Output(0);
-    }
-    if(cmd == 'R'){
-      Count = 0;
-      Flag = 0;
-      SysTick_Init(8000000); // 10 Hz
-    }
-    if(Flag){
-      Flag = 0; // clear semaphore
-      for(i=0; i<SIZE; i++){
-        UART_OutUDec(buffer[i]);
-        UART_OutChar(' ');
-      }
-      UART_OutChar(LF);
-    }
+		if (cmd == 'P') {
+			kp1 = UART_InUDecNoEcho();
+			kp2 = UART_InUDecNoEcho();
+		}
+		if (cmd == 'I') {
+			ki1 = UART_InUDecNoEcho();
+			ki2 = UART_InUDecNoEcho();
+		}
   }
 }
 void SysTick_Handler(void){
@@ -84,4 +76,28 @@ void SysTick_Handler(void){
     buffer[Count] = data;
     Count++;
   }
+}
+
+		
+//------------UART_InUDecNoEcho------------	
+// InUDec accepts ASCII input in unsigned decimal format	
+//     and converts to a 32-bit unsigned number	
+//     valid range is 0 to 4294967295 (2^32-1)	
+// Input: none	
+// Output: 32-bit unsigned number	
+// If you enter a number above 4294967295, it will return an incorrect value	
+uint32_t UART_InUDecNoEcho(void){	
+uint32_t number=0, length=0;	
+char character;	
+  character = UART_InChar();	
+  while(character != CR){ // accepts until <enter> is typed	
+// The next line checks that the input is a digit, 0-9.	
+// If the character is not 0-9, it is ignored and not echoed	
+    if((character>='0') && (character<='9')) {	
+      number = 10*number+(character-'0');   // this line overflows if above 4294967295	
+      length++;	
+    }	
+    character = UART_InChar();	
+  }	
+  return number;	
 }

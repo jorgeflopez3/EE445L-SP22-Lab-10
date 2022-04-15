@@ -12,12 +12,8 @@ import serial
 import matplotlib.pyplot as plt
 import time
 from time import sleep
-time =  [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-speed = [5, 6, 4, 4, 5, 6, 4, 4, 5, 5]
-plt.ylabel('Speed (rps)')
-plt.xlabel('Time (sec)')
 from serial import Serial
-ser = serial.Serial('COM6', 115200)
+ser = serial.Serial('COM5', 115200)
 print('Connected to',ser.name)             # check which port was really used
 print('Baud rate',ser.baudrate,'bits/sec') # baud rate
 
@@ -26,28 +22,37 @@ command = ""
 valuestr = ""
 value = 0
 ser.timeout = 1
+print("COMMAND GUIDE:")
+print("M -> change motor speed")
+print("P -> change proportional constants")
+print("I -> change integral constants")
 while command != 'q': #Main loop
     command = input("Command>")
-    if command == "L":
-        valuestr = input("Value=")
-        value = int(valuestr)
-        print("LED =",value)
-        ser.write('L'.encode('ASCII'))
-        ser.write(valuestr.encode('ASCII'))
+    if command == "M":
+        motor_speed = input("Value=")
+        ser.write('M'.encode('ASCII'))
+        ser.write(motor_speed.encode('ASCII'))
         ser.write('\r'.encode('ASCII'))
-    if command == "l":
-        print("LED off")
-        ser.write('l'.encode('ASCII'))
-    if command == "R":
-        print("Run")
-        ser.write('R'.encode('ASCII'))    
-        sleep(2.0)
-        serialString = ser.readline(1000)
-        print (serialString)
-        speed = [int(s) for s in serialString.split() if s.isdigit()]
-        print (speed)
-        plt.plot(time,speed)
-        plt.show()
+    if command == "P":
+        kp1 = input("kp1=")
+        kp2 = input("kp2=")
+        ser.write('P'.encode('ASCII'))
+        ser.write(kp1.encode('ASCII'))
+        ser.write('\r'.encode('ASCII'))
+        ser.write(kp2.encode('ASCII'))
+        ser.write('\r'.encode('ASCII'))
+    if command == "I":
+        ki1 = input("ki1=")
+        ki2 = input("ki2=")
+        ser.write('I'.encode('ASCII'))
+        ser.write(ki1.encode('ASCII'))
+        ser.write('\r'.encode('ASCII'))
+        ser.write(ki2.encode('ASCII'))
+        ser.write('\r'.encode('ASCII'))
+
+
+
+
 
 
 
