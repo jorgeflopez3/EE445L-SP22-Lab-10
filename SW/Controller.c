@@ -20,7 +20,7 @@ int32_t D;
 int32_t MotorSpeed;    
 
 void Controller_Init() {	
-	PWM0A_Init(40000,7000);      // duty cycle 
+	PWM0A_Init(40000,10000);      // duty cycle 
 	desired = 300; 
 	Kp1 = 75; 
 	Kp2 = 337; 
@@ -55,11 +55,11 @@ void Timer2A_Init( uint32_t period, uint32_t priority){
 void Timer2A_Handler(void){
 	TIMER2_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER2A timeout
 	
-  Count10ms++;
-  if(Count10ms>3){                // stopped motor
-    rps = 0;                      // set rps to zero
-    Count10ms = 0;
-  }
+		Count10ms++;
+		if(Count10ms>3){                // stopped motor
+			rps = 0;                      // set rps to zero
+			Count10ms = 0;
+		}
 
     E = desired-rps;                // Determine ERROR
     MotorSpeed = rps;             // Set the Motor Speed
@@ -72,7 +72,7 @@ void Timer2A_Handler(void){
     if(I >39900) I = 39900;       // Maximum PWM output = 39900
 
     U   = P + I;              // Calculate the actuator value
-    if(U < 300)  U=300;           // Minimum PWM output
+    if(U < 7000)  U=7000;           // Minimum PWM output
     if(U >39900) U=39900;         // 3000 to 39900
 
     PWM0A_Duty(U);                // Send to PWM

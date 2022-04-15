@@ -2,6 +2,7 @@
 #include "Tachometer.h"
 #include "../inc/tm4c123gh6pm.h"
 #include "../inc/CortexM.h"
+#include "Controller.h"
 uint32_t Period;                       // 24-bit, 12.5 ns units
 uint32_t static First;                 // Timer0A first edge, 12.5 ns units
 int32_t Done;   // mailbox status set each rising
@@ -35,6 +36,7 @@ void Tachometer_Init(void){
 }
 
 void Timer1A_Handler(void){
+	Count10ms = 0;
   TIMER1_ICR_R = 0x00000004; // acknowledge timer1A
   Period = (First - TIMER1_TAR_R)&0x00FFFFFF; 
 	if (Period > 83333) {

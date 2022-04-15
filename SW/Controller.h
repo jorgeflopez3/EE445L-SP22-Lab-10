@@ -25,3 +25,6 @@ int Calculate_Error(int actualSpeed, int desiredSpeed);
 // Input: int dutyCycle
 // Output: int
 int Estimate_MotorSpeed(int dutyCycle); 
+
+// Global Count Var
+extern uint8_t Count10ms; 
