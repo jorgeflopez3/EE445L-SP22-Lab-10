@@ -31,6 +31,7 @@
 #include "../inc/LaunchPad.h"
 #include "../inc/SysTickInts.h"
 #include "../inc/tm4c123gh6pm.h"
+#include "../inc/ST7735.h"
 #include "Controller.h" 
 #include "Tachometer.h"
 
@@ -45,8 +46,8 @@ uint32_t data; // measured data from switches
 int32_t rps_in;
 int32_t period_in;
 
-#define SIZE 10
-uint32_t buffer[SIZE];
+#define MAX_Y 750
+#define MIN_Y 200
 uint32_t UART_InUDecNoEcho(void);
 int main(void){
 char cmd;
@@ -55,9 +56,12 @@ char cmd;
   LaunchPad_Init();
 	Controller_Init();
 	Tachometer_Init();
+	ST7735_InitR(INITR_REDTAB);
   Count = 0;
   Flag = 0;
   EnableInterrupts();       // Enable interrupts
+	ST7735_FillRect(0,0,128,32, ST7735_BLACK);
+	ST7735_PlotClear(MIN_Y,MAX_Y);
   while(1){int i;
 		rps_in = Tachometer_RPS();
 		period_in = Tachometer_Period();
@@ -69,7 +73,7 @@ char cmd;
     cmd = UART_InCharNonBlock();
     if(cmd == 'M'){
       speed = UART_InUDecNoEcho(); // CR terminated
-			Controller_SetSpeed(speed*10);
+			Controller_SetSpeed(speed);
     }
 		if (cmd == 'P') {
 			kp1 = UART_InUDecNoEcho();
@@ -80,6 +84,28 @@ char cmd;
 			ki1 = UART_InUDecNoEcho();
 			ki2 = UART_InUDecNoEcho();
 			Controller_SetIConsts(ki1,ki2);
+		}
+		if (NewData) {
+			rps_in = Controller_GetRps();
+			uint32_t int_portion = rps_in / 10;
+			uint32_t dec_portion = rps_in % 10;
+			ST7735_SetCursor(0,0);
+			ST7735_OutString("PI Loop RPS = ");
+			ST7735_OutUDec(int_portion);
+			ST7735_OutChar('.');
+			ST7735_OutUDec(dec_portion);
+			ST7735_SetCursor(0,1);
+			ST7735_OutString("E = ");
+			ST7735_sDecOut2(Controller_GetE()*10);
+			ST7735_SetCursor(0,2);
+			ST7735_OutString("U = ");
+			ST7735_OutUDec(Controller_GetU());
+			if (rps_in < MAX_Y && rps_in > MIN_Y) {
+				ST7735_PlotPoint(rps_in);
+				ST7735_PlotPointRed(Controller_GetDesiredSpeed());
+				ST7735_PlotNextErase();
+			}
+			NewData = 0;
 		}
   }
 }

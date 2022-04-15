@@ -22,5 +22,12 @@ void Controller_SetCurrentRps(uint32_t currentRps);
 
 uint32_t Controller_GetRps();
 
+int32_t Controller_GetE();
+
+int32_t Controller_GetU();
+
+int32_t Controller_GetDesiredSpeed();
+
 // Global Count Var
 extern uint8_t Count10ms; 
+extern uint8_t NewData;

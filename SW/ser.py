@@ -30,8 +30,12 @@ while command != 'q': #Main loop
     command = input("Command>")
     if command == "M":
         motor_speed = input("Value=")
+        motor_dec = float(motor_speed)
+        motor_dec *= 10
+        motor_int = int(motor_dec)
+        motor_str = str(motor_int)
         ser.write('M'.encode('ASCII'))
-        ser.write(motor_speed.encode('ASCII'))
+        ser.write(motor_str.encode('ASCII'))
         ser.write('\r'.encode('ASCII'))
     if command == "P":
         kp1 = input("kp1=")

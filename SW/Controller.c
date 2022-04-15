@@ -19,6 +19,7 @@ int32_t Ki1;
 int32_t Ki2; 
 int32_t D; 
 int32_t MotorSpeed;    
+uint8_t NewData;
 
 void Controller_Init() {	
 	PWM0A_Init(40000,10000);      // duty cycle 
@@ -65,6 +66,7 @@ void Timer2A_Handler(void){
 		rps = Tachometer_RPS();
     E = desired-rps;                // Determine ERROR
     MotorSpeed = rps;             // Set the Motor Speed
+		NewData = 1;
     P  =  (Kp1 * E)/Kp2;          // Proportional terms from Blynk    
     if(P <  300) P = 300;         // Minimum PWM output
     if(P >39900) P = 39900;       // 3000 to 39900
@@ -100,4 +102,16 @@ void Controller_SetCurrentRps(uint32_t currentRps) {
 
 uint32_t Controller_GetRps() {
 	return MotorSpeed;
+}
+
+int32_t Controller_GetE() {
+	return E;
+}
+
+int32_t Controller_GetU() {
+	return U;
+}
+
+int32_t Controller_GetDesiredSpeed() {
+	return desired;
 }

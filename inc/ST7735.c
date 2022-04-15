@@ -1514,6 +1514,22 @@ void ST7735_PlotPoint(int32_t y){int32_t j;
   ST7735_DrawPixel(X,   j+1, ST7735_BLUE);
   ST7735_DrawPixel(X+1, j+1, ST7735_BLUE);
 }
+
+void ST7735_PlotPointRed(int32_t y){int32_t j;
+  if(y<Ymin) y=Ymin;
+  if(y>Ymax) y=Ymax;
+  // X goes from 0 to 127
+  // j goes from 159 to 32
+  // y=Ymax maps to j=32
+  // y=Ymin maps to j=159
+  j = 32+(127*(Ymax-y))/Yrange;
+  if(j<32) j = 32;
+  if(j>159) j = 159;
+  ST7735_DrawPixel(X,   j,   ST7735_RED);
+  ST7735_DrawPixel(X+1, j,   ST7735_RED);
+  ST7735_DrawPixel(X,   j+1, ST7735_RED);
+  ST7735_DrawPixel(X+1, j+1, ST7735_RED);
+}
 // *************** ST7735_PlotLine ********************
 // Used in the voltage versus time plot, plot line to new point
 // It does output to display
@@ -1758,20 +1774,7 @@ void ST7735_SetTextColor(uint16_t color){
   StTextColor = color;
 }
 
-// Print a character to ST7735 LCD.
-int fputc(int ch, FILE *f){
-  ST7735_OutChar(ch);
-  return 1;
-}
-// No input from Nokia, always return data.
-int fgetc (FILE *f){
-  return 0;
-}
-// Function called when file error occurs.
-int ferror(FILE *f){
-  /* Your implementation of ferror */
-  return EOF;
-}
+
 // Abstraction of general output device
 // Volume 2 section 3.4.5
 
@@ -1780,10 +1783,7 @@ int ferror(FILE *f){
 // Initialize ST7735 LCD
 // Inputs: none
 // Outputs: none
-void Output_Init(void){
-  ST7735_InitR(INITR_REDTAB);
-  ST7735_FillScreen(0);                 // set screen to black
-}
+
 
 // Clear display
 void Output_Clear(void){ // Clears the display
@@ -1793,10 +1793,7 @@ void Output_Clear(void){ // Clears the display
 void Output_Off(void){   // Turns off the display
   Output_Clear();  // not implemented
 }
-// Turn on display
-void Output_On(void){ // Turns on the display
-  Output_Init();      // reinitialize
-}
+
 // set the color for future output
 // Background color is fixed at black
 // Input:  16-bit packed color

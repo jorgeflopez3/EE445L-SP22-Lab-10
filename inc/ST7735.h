@@ -554,6 +554,8 @@ Parameter LCD display
 */
 void ST7735_uBinOut6(uint32_t n); 
 
+void ST7735_PlotPointRed(int32_t y);
+
 /**************ST7735_XYplotInit***************
  Specify the X and Y axes for an x-y scatter plot
  Draw the title and clear the plot area
