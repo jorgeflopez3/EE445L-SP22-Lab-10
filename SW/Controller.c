@@ -4,6 +4,9 @@
 #include "PWM.h" 
 #include "../inc/tm4c123gh6pm.h"
 
+#define PF1   (*((volatile uint32_t *)0x40025008)) // RED LED
+
+	
 uint32_t desired; 
 //uint32_t period;     		// 24-bit, 12.5 ns units
 //uint32_t Period;     		// 24-bit, 12.5 ns units
@@ -22,7 +25,7 @@ int32_t MotorSpeed;
 uint8_t NewData;
 
 void Controller_Init() {	
-	PWM0A_Init(40000,10000);      // duty cycle 
+	PWM0A_Init(40000,36000);      // duty cycle 
 	desired = 500; 
 	Kp1 = 75; 
 	Kp2 = 337; 
@@ -56,6 +59,7 @@ void Timer2A_Init( uint32_t period, uint32_t priority){
 
 void Timer2A_Handler(void){
 		TIMER2_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER2A timeout
+		PF1 = 0x02;
 	
 		Count10ms++;
 		if(Count10ms>3){                // stopped motor
@@ -80,6 +84,7 @@ void Timer2A_Handler(void){
     if(U >39900) U=39900;         // 3000 to 39900
 
     PWM0A_Duty(U);                // Send to PWM
+		PF1 = 0x00;
 }  
 
 void Controller_SetSpeed(int32_t speed) {

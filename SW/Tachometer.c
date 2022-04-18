@@ -3,6 +3,7 @@
 #include "../inc/tm4c123gh6pm.h"
 #include "../inc/CortexM.h"
 #include "Controller.h"
+#define PF2   (*((volatile uint32_t *)0x40025010)) // BLUE LED
 uint32_t Period;                       // 24-bit, 12.5 ns units
 uint32_t static First;                 // Timer0A first edge, 12.5 ns units
 int32_t Done;   // mailbox status set each rising
@@ -36,6 +37,7 @@ void Tachometer_Init(void){
 }
 
 void Timer1A_Handler(void){
+	PF2 = 0x04;
 	Count10ms = 0;
   TIMER1_ICR_R = 0x00000004; // acknowledge timer1A
   Period = (First - TIMER1_TAR_R)&0x00FFFFFF; 
@@ -44,6 +46,7 @@ void Timer1A_Handler(void){
 	}
   First = TIMER1_TAR_R;      // setup for next
   Done = 1;                  // set semaphore
+	PF2 = 0x00;
 }
 
 uint32_t Tachometer_Period(void){
